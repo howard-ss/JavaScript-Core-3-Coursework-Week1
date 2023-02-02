@@ -37,24 +37,27 @@ function submit() {
     alert("Please fill all fields!");
     return false;
   } else {
-    let book = new Book(title.value, title.value, pages.value, check.checked);
-    library.push(book);
+    //6.author.value redefined origin value.value, which caused to save wrong answer;
+    let book = new Book(title.value, author.value, pages.value, check.checked);
+    //1. Website loads but nothing works- myLibrary is defined on the top, but
+    //   it's used as 'library', so the function won't work, change it to 'myLibrary'
+    myLibrary.push(book);
     render();
   }
-}
-
-function Book(title, author, pages, check) {
+  //4.The values of 'title' and 'author' are switched in the constructor of the Book class. To fix this, modify the constructor
+}class Book {      
+ constructor(title, author, pages, check) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.check = check;
 }
-
+}
 function render() {
   let table = document.getElementById("display");
   let rowsNumber = table.rows.length;
-  //delete old table
-  for (let n = rowsNumber - 1; n > 0; n-- {
+  //delete old table -  ')' omitted in for loop condition
+  for (let n = rowsNumber - 1; n > 0; n--) {
     table.deleteRow(n);
   }
   //insert updated row and cells
@@ -90,14 +93,24 @@ function render() {
 
     //add delete button to every row and render again
     let delButton = document.createElement("button");
-    delBut.id = i + 5;
-    cell5.appendChild(delBut);
-    delBut.className = "btn btn-warning";
-    delBut.innerHTML = "Delete";
-    delBut.addEventListener("clicks", function () {
+    delButton.id = i + 5;    // 7.delBut is not defined , changed it to deButton which is defined on top
+    cell5.appendChild(delButton);
+    delButton.className = "btn btn-warning";
+    delButton.innerHTML = "Delete";
+    delButton.addEventListener("clicks", function () {
       alert(`You've deleted title: ${myLibrary[i].title}`);
       myLibrary.splice(i, 1);
       render();
     });
   }
 }
+
+//5. Delete button is broken:
+/**
+ * The 'removeBook' function is not defined in the script.js file. To fix this, add
+ * the following code to the script.js file:  
+ */
+  function removeBook(index) {
+    myLibrary.splice(index, 1);
+    render();
+  }
